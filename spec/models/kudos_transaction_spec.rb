@@ -18,7 +18,7 @@ RSpec.describe KudosTransaction, type: :model do
   end
 
   describe '#assign_default_date' do
-    it 'assign default date to a transaction' do
+    it 'assigns default date to a transaction' do
       transaction = KudosTransaction.create(giver: @user1, receiver: @user2, quantity: 1)
       expect(transaction.date).to eq(Date.today)
     end

@@ -21,7 +21,7 @@ RSpec.describe KudosTransactionsController, type: :controller do
       end
     end
 
-    context 'successful post' do
+    context 'unsuccessful post' do
       let(:params) { { receiverId: @user2.id, message: 'awesome job!', quantity: 9 } }
       it 'creates kudos_transaction and returns remaining quantity for the user' do
         post :create, format: :json, params: params
