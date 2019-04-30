@@ -1,0 +1,106 @@
+<div class='kudoscontainer'>
+  <ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+      <a v-bind:class="'nav-link '+ showTabGive" v-on:click="tabGive"  href="#">To Give Kudos  <span class="badge badge-light">{{leftQuantity}}</span></a>
+    </li>
+    <li class="nav-item">
+      <a v-bind:class="'nav-link '+ showTabReceived" v-on:click="tabReceived" href="#">Kudos Received</a>
+    </li>
+    <li class="nav-item">
+      <a  v-bind:class="'nav-link '+ showTabGiven" v-on:click="tabGiven" href="#">Kudos Given</a>
+    </li>
+  </ul>
+
+  <table v-bind:class="'table table-striped '+ showTableGive">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+   <% @users.each do |user|%>
+    <tr>
+      <td><%= user.full_name%></td>
+      <td><a  data-toggle="modal" data-target="#messageModal" v-on:click="setModalUser('<%=user.id%>', '<%=user.full_name%>')" href='#' >Give Kudos</a></td>
+    </tr>
+    <% end %>
+  </tbody>
+  </table>
+
+  <table v-bind:class="'table table-striped '+ showTableReceived">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+   <% @kudos_received.each do |kudo|%>
+    <tr>
+      <td><%= kudo.giver.full_name %></td>
+      <td><%= kudo.quantity %></td>
+      <td><%= kudo.date %></td>
+    </tr>
+    <% end %>
+  </tbody>
+  </table>
+
+  <table v-bind:class="'table table-striped '+ showTableGiven">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+   <% @kudos_given.each do |kudo|%>
+    <tr>
+      <td><%= kudo.receiver.full_name %></td>
+       <td><%= kudo.quantity %></td>
+      <td><%= kudo.date %></td>
+    </tr>
+    <% end %>
+  </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="messageModalLabel">To give kudos to {{userName}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Quantity:</label>
+            <input v-model="quantity" type="text" class="form-control" id="quantity">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea v-model="message" class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" v-on:click="giveKudos" class="btn btn-primary">Give Kudos</button>
+      </div>
+      <div v-bind:class="'alert alert-danger '+ showGiveKudosError" role="alert">
+        {{ giveKudosError }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :script do %>
+    <script>
+      window.QUANTITY = <%=current_user.kudos_quantity.quantity%>;
+    </script>
+<% end %>

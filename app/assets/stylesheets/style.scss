@@ -1,0 +1,26 @@
+
+.masthead {
+  height: 50vh;
+  min-height: 200px;
+  background-image: url('https://source.unsplash.com/BtbjCFUvBXs/1920x1080');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.formcontainer {
+  align-content: center;
+  margin: 100px auto;
+  max-width: 500px;
+}
+
+.kudoscontainer {
+  align-content: center;
+  margin: 100px auto;
+  table {
+    margin: 30px auto;
+  }
+}
+
+
+
