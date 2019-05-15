@@ -13,18 +13,23 @@ class KudosTransactionsController < ApplicationController
   def create
     transaction = build_transaction
     result = false
+    error_message = ''
     ActiveRecord::Base.transaction do
       begin
         result = transaction.save
         transaction.giver.kudos_quantity.withdraw(transaction.quantity) if result
+      rescue ActiveRecord::StaleObjectError
+        error_message = 'Another giving kudos action is on going please wait'
+        raise ActiveRecord::Rollback
       rescue StandardError => e
+        error_message = 'Giver does not have enough kudos to give away'
         raise ActiveRecord::Rollback
       end
     end
     if result
       render json: { quantity: current_user.kudos_quantity.quantity}
     elsif transaction.errors.blank?
-      render json: 'Giver does not have enough kudos to give away', status: :unprocessable_entity
+      render json: error_message, status: :unprocessable_entity
     else
       render json: transaction.errors.full_messages, status: :unprocessable_entity
     end
