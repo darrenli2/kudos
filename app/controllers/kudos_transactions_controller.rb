@@ -7,7 +7,7 @@ class KudosTransactionsController < ApplicationController
   def index
     @users = User.same_organization(current_user) # TODO: add pagination
     @kudos_received = KudosTransaction.where(receiver: current_user) # TODO: add pagination
-    @kudos_given = KudosTransaction.where(giver: current_user) # TODO: add pagination
+    @kudos_given = KudosTransaction.includes(:receiver).where(giver: current_user) # TODO: add pagination
   end
 
   def create

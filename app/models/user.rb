@@ -15,7 +15,7 @@ class User < ApplicationRecord
   after_create_commit :create_kudos_quantity
 
   def self.same_organization(user)
-    User.all.select{ |u| (u.organization == user.organization) }
+    User.all.includes(:organization).select{ |u| (u.organization == user.organization) }
   end
 
   def full_name
